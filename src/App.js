@@ -2,21 +2,35 @@ import React, { useState } from "react";
 import API from "./API";
 import Users from "./components/users"
 import SearchStatus from "./components/searchStatus";
+import Pagination from "./components/pagiantion";
+import { paginate } from "./utils/paginate"
 
 function App() {
     const [users, setUsers] = useState(API.users.fetchAll())
+    const count = users.length
+    const pageSize = 4
+    const [currentPage, setCurrentPage] = useState(1)
+    const handlePageChange = (pageIndex) => {
+        console.log("page:", pageIndex)
+        setCurrentPage(pageIndex)
+    }
+
     const handleDelete = (id) => {           
         setUsers((prevState) => prevState.filter(item=>item._id !== id))
     }
     const handleToggleBookMark = (id) => {
-        const p = users.filter(user => user._id == id)
+        const p = users.filter(user => user._id === id)
         let index = users.findIndex(i => i === p[0])
         users[index].bookmark === true ? users[index].bookmark = false : users[index].bookmark = true
         setUsers([...users])
     }
+
+    
+    const userCrop = paginate(users, currentPage, pageSize)
+
     return (<div>
-        <SearchStatus length={users.length} />
-        {users.length === 0 ? "" : <>
+        <SearchStatus length={count} />
+        {count === 0 ? "" : <>
             <table className="table">
             <thead>
             <tr>
@@ -30,9 +44,15 @@ function App() {
             </tr>
             </thead>
             <tbody>
-                    < Users users={users} func={handleDelete} onFolow={handleToggleBookMark} />
+                    < Users users={userCrop} func={handleDelete} onFolow={handleToggleBookMark} />
             </tbody>
-            </table></>}
+            </table></>
+        }
+        <Pagination
+            itemsCount={count}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={handlePageChange} />
     </div>)
 }
 
