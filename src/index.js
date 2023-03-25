@@ -1,12 +1,12 @@
 import React from "react";
-import { createRoot } from 'react-dom/client';
-import "bootstrap/dist/css/bootstrap.css"
+import { createRoot } from "react-dom/client";
+import "bootstrap/dist/css/bootstrap.css";
 import Counter from "./App";
 
 const App = () => {
-    return <Counter />
-}
+    return <Counter />;
+};
 
-const contain = document.getElementById('root')
-const root = createRoot(contain)
-root.render(<App />)
+const contain = document.getElementById("root");
+const root = createRoot(contain);
+root.render(<App />);
