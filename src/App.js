@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API from "./API";
 import Users from "./components/users";
 import SearchStatus from "./components/searchStatus";
@@ -8,18 +8,24 @@ import GroupList from "./components/groupList";
 
 function App() {
   const [users, setUsers] = useState(API.users.fetchAll());
-  const count = users.length;
   const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  const [profession] = useState(API.professions.fetchAll()) 
-  const handleProfessionSelect = (params) => {
-      console.log(params)
-  }
+  const [profession, setProfession] = useState();
+  const [selectedProf, setSelectedProf] = useState();
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedProf]);
+
+  const handleProfessionSelect = (item) => {
+    setSelectedProf(item);
+  };
+  useEffect(() => {
+    API.professions.fetchAll().then((data) => setProfession(data));
+  }, []);
   const handlePageChange = (pageIndex) => {
-    console.log("page:", pageIndex);
     setCurrentPage(pageIndex);
   };
-  console.log(profession)
   const handleDelete = (id) => {
     setUsers((prevState) => prevState.filter((item) => item._id !== id));
   };
@@ -31,19 +37,30 @@ function App() {
       : (users[index].bookmark = true);
     setUsers([...users]);
   };
+  const filteredUsers = selectedProf ? users.filter((user) => user.profession === selectedProf) : users;
+  const count = filteredUsers.length;
+  const userCrop = paginate(filteredUsers, currentPage, pageSize);
 
-  const userCrop = paginate(users, currentPage, pageSize);
+  const clearFilter = () => {
+    setSelectedProf();
+  };
 
   return (
-    <div>
-
-      <SearchStatus length={count} />
-          <GroupList items={profession} onItemSelect={handleProfessionSelect } />
+      <div>
+        <div className="d-flex">
+          {profession && <div className="d-flex flex-column flex-shrink-0 p-3">
+            <GroupList
+              items={profession}
+              onItemSelect={handleProfessionSelect}
+              selectedItem={selectedProf}
+            />
+            <button className="btn btn-secondary mt-2" onClick={clearFilter}>Очистить</button>
+          </div>}
+          <div className="d-flex flex-column">
+            <SearchStatus length={count} />
           {count === 0
             ? ("")
-            : (
-              <>
-                <table className="table">
+            : (<table className="table">
                   <thead>
                     <tr>
                       <th scope="col">Имя</th>
@@ -63,15 +80,17 @@ function App() {
                      />
                   </tbody>
                </table>
-             </>
-              )
-            }
+              )}
+             </div>
+          </div>
+          <div className="d-flex justify-content-center">
             <Pagination
-                itemsCount={count}
-                pageSize={pageSize}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
+              itemsCount={count}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
             />
+            </div>
     </div>
   );
 }
