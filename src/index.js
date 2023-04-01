@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import Counter from "./App";
 
 const App = () => {
-    return <Counter />;
+  return <Counter />;
 };
 
 const contain = document.getElementById("root");
