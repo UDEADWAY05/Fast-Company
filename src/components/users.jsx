@@ -9,7 +9,7 @@ import _ from "lodash";
 
 const Users = () => {
   const [users, setUsers] = useState();
-  const pageSize = 12;
+  const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [profession, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
@@ -42,6 +42,7 @@ const Users = () => {
     users[index].bookmark === true
       ? (users[index].bookmark = false)
       : (users[index].bookmark = true);
+    setUsers([...users]);
   };
   if (users) {
     const filteredUsers = selectedProf ? users.filter((user) => user.profession._id === selectedProf._id) : users;
@@ -84,7 +85,7 @@ const Users = () => {
                 </div>
         </div>;
   };
-  return "";
+  return "Loading...";
 };
 
 export default Users;
