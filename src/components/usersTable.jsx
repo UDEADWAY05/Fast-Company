@@ -6,7 +6,7 @@ import Table from "./table";
 import TableHeader from "./tableHeader";
 import TableBody from "./tableBody";
 
-const UserTable = ({ users, onFolow, onSort, selectedSort, onUsers, onDelete }) => {
+const UserTable = ({ users, onFolow, onSort, selectedSort, onDelete }) => {
   const columns = {
     name: { path: "name", name: "Имя" },
     qualities: { name: "Качество", component: (user) => (<QualitiesList qualities={user.qualities}/>) },
@@ -17,8 +17,8 @@ const UserTable = ({ users, onFolow, onSort, selectedSort, onUsers, onDelete }) 
     delete: { component: (user) => (<button className="btn btn-danger" type="submit" onClick={() => onDelete(user._id)}> delete </button>) }
   };
   return (
-    <Table onSort={onSort} selectedSort={selectedSort} columns={columns} onUsers={onUsers} users={users}>
-      <TableHeader {...{ onSort, selectedSort, columns, onUsers, users }} />
+    <Table onSort={onSort} selectedSort={selectedSort} columns={columns} users={users}>
+      <TableHeader {...{ onSort, selectedSort, columns }} />
       <TableBody {...{ columns, data: users }} />
     </Table>
   );

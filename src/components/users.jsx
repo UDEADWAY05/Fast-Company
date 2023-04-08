@@ -13,7 +13,6 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [profession, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
-  const [remout, setRemout] = useState();
   const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
   useEffect(() => {
     setCurrentPage(1);
@@ -21,7 +20,6 @@ const Users = () => {
 
   const handleProfessionSelect = (item) => {
     setSelectedProf(item);
-    setUsers([...users]);
   };
   useEffect(() => {
     API.professions.fetchAll().then((data) => setProfession(data));
@@ -31,7 +29,6 @@ const Users = () => {
   }, []);
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
-    setUsers([...users]);
   };
   const handleSort = (item) => {
     setSortBy(item);
@@ -45,22 +42,16 @@ const Users = () => {
     users[index].bookmark === true
       ? (users[index].bookmark = false)
       : (users[index].bookmark = true);
-    setUsers([...users]);
   };
-  useEffect(() => {
-    users === undefined ? "" : addFunction();
-  }, [users]);
-  function addFunction() {
+  if (users) {
     const filteredUsers = selectedProf ? users.filter((user) => user.profession._id === selectedProf._id) : users;
     const count = filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
     const userCrop = paginate(sortedUsers, currentPage, pageSize);
     const clearFilter = () => {
       setSelectedProf();
-      setUsers([...users]);
     };
-    setRemout(
-        <div>
+    return <div>
             <div className="d-flex">
             {profession && <div className="d-flex flex-column flex-shrink-0 p-3">
                 <GroupList
@@ -79,7 +70,6 @@ const Users = () => {
                  onFolow = {handleToggleBookMark}
                  onSort={handleSort}
                  selectedSort={sortBy}
-                 onUsers = {setUsers}
                  onDelete={handleDelete}
                 />)}
                 </div>
@@ -92,10 +82,9 @@ const Users = () => {
                 onPageChange={handlePageChange}
                 />
                 </div>
-        </div>
-    );
+        </div>;
   };
-  return remout;
+  return "";
 };
 
 export default Users;
