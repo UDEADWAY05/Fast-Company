@@ -19,6 +19,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             scope="col"
           >
             {columns[column].name}
+            <i id={columns[column].id} className={columns[column].classPath} />
           </th>;
       })}
     </tr>
