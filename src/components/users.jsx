@@ -9,11 +9,11 @@ import _ from "lodash";
 
 const Users = () => {
   const [users, setUsers] = useState();
-  const pageSize = 4;
+  const pageSize = 12;
   const [currentPage, setCurrentPage] = useState(1);
   const [profession, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
-  const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+  const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf]);
@@ -44,6 +44,26 @@ const Users = () => {
       : (users[index].bookmark = true);
     setUsers([...users]);
   };
+  useEffect(() => {
+    if (document.querySelector("#" + sortBy.path) !== null) {
+      document.querySelector(".bi-caret-up-fill") === null ? "" : document.querySelector(".bi-caret-up-fill").className = "bi";
+      document.querySelector(".bi-caret-down-fill") === null ? "" : document.querySelector(".bi-caret-down-fill").className = "bi";
+      if (sortBy.order === "asc") {
+        document.querySelector("#" + sortBy.path).className = "bi-caret-up-fill";
+      } else {
+        document.querySelector("#" + sortBy.path).className = "bi-caret-down-fill";
+      }
+      setUsers([...users]);
+    } else if (document.querySelector("#profession") !== null) {
+      document.querySelector(".bi-caret-up-fill") === null ? "" : document.querySelector(".bi-caret-up-fill").className = "bi";
+      document.querySelector(".bi-caret-down-fill") === null ? "" : document.querySelector(".bi-caret-down-fill").className = "bi";
+      if (sortBy.order === "asc") {
+        document.querySelector("#profession").className = "bi-caret-up-fill";
+      } else {
+        document.querySelector("#profession").className = "bi-caret-down-fill";
+      }
+    }
+  }, [sortBy]);
   if (users) {
     const filteredUsers = selectedProf ? users.filter((user) => user.profession._id === selectedProf._id) : users;
     const count = filteredUsers.length;
