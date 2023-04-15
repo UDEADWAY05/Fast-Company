@@ -5,10 +5,11 @@ import QualitiesList from "./qualituesList";
 import Table from "./table";
 import TableHeader from "./tableHeader";
 import TableBody from "./tableBody";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const UserTable = ({ users, onFolow, onSort, selectedSort, onDelete }) => {
   const columns = {
-    name: { path: "name", name: "Имя", classPath: "bi-caret-up-fill", id: "name" },
+    name: { path: "name", name: "Имя", classPath: "bi-caret-up-fill", id: "name", component: (user) => (<Link to={`/users/` + user._id}>{ user.name }</Link>) },
     qualities: { name: "Качество", component: (user) => (<QualitiesList qualities={user.qualities}/>), classPath: "bi" },
     professions: { path: "profession.name", name: "Профессия", id: "profession", classPath: "bi" },
     completedMeetings: { path: "completedMeetings", name: "Встретился, раз", id: "completedMeetings", classPath: "bi" },
