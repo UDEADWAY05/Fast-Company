@@ -5,14 +5,13 @@ import PropTypes from "prop-types";
 import API from "../API";
 
 const UserInfo = ({ id }) => {
-  const [users, setUsers] = useState();
+  const [user, setUser] = useState();
   useEffect(() => {
-    API.users.fetchAll().then((data) => setUsers(data));
+    API.users.getById(id).then((data) => setUser(data));
   }, []);
 
-  if (users) {
-    const myUser = users.filter((user) => user._id === id);
-    return <UserBody user={myUser[0]}/>;
+  if (user) {
+    return <UserBody user={user}/>;
   }
   return "loading...";
 };

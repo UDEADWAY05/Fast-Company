@@ -14,7 +14,7 @@ const UserBody = ({ user }) => {
     <QualitiesList qualities={user.qualities} ></QualitiesList>
     <h5>{"completedMeetings: " + user.completedMeetings}</h5>
     <h1>{"Rate: " + user.rate}</h1>
-    <button className="" onClick={() => HandleSave()}>сохранить</button>
+    <button className="" onClick={() => HandleSave()}>вернуться ко всем</button>
   </div>;
 };
 
