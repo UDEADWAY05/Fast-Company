@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import API from "../API";
-import SearchStatus from "../components/searchStatus";
-import Pagination from "../components/pagiantion";
+import SearchStatus from "./searchStatus";
+import Pagination from "./pagiantion";
 import { paginate } from "../utils/paginate";
-import GroupList from "../components/groupList";
-import UserTable from "../components/usersTable";
+import GroupList from "./groupList";
+import UserTable from "./usersTable";
+import FindInputComp from "./findInpt";
 import _ from "lodash";
 
 const Users = () => {
@@ -14,11 +15,13 @@ const Users = () => {
   const [profession, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+  const [filterFind, setFilterFind] = useState("");
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf]);
 
   const handleProfessionSelect = (item) => {
+    setFilterFind("");
     setSelectedProf(item);
   };
   useEffect(() => {
@@ -44,6 +47,10 @@ const Users = () => {
       : (users[index].bookmark = true);
     setUsers([...users]);
   };
+  const handleFind = (e) => {
+    setSelectedProf();
+    setFilterFind(e.target.value);
+  };
   useEffect(() => {
     if (document.querySelector("#" + sortBy.path) !== null) {
       document.querySelector(".bi-caret-up-fill") === null ? "" : document.querySelector(".bi-caret-up-fill").className = "bi";
@@ -65,7 +72,16 @@ const Users = () => {
     }
   }, [sortBy]);
   if (users) {
-    const filteredUsers = selectedProf ? users.filter((user) => user.profession._id === selectedProf._id) : users;
+    let filteredUsers;
+    if (selectedProf || filterFind) {
+      if (selectedProf) {
+        filteredUsers = users.filter((user) => user.profession._id === selectedProf._id);
+      } else if (filterFind) {
+        filteredUsers = users.filter((user) => user.name.includes(filterFind));
+      }
+    } else {
+      filteredUsers = users;
+    }
     const count = filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
     const userCrop = paginate(sortedUsers, currentPage, pageSize);
@@ -83,7 +99,8 @@ const Users = () => {
                 <button className="btn btn-secondary mt-2" onClick={clearFilter}>Очистить</button>
             </div>}
             <div className="d-flex flex-column">
-                <SearchStatus length={count} />
+            <SearchStatus length={count} />
+            <FindInputComp value={filterFind } onChange={handleFind} />
             {count === 0
               ? ("")
               : (<UserTable

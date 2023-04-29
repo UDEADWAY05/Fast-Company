@@ -2,7 +2,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter } from 'react-router-dom/cjs/react-router-dom.min';
-import Counter from "./App";
+import "bootstrap/dist/css/bootstrap.css";
+import Counter from "./app/App";
 
 const App = () => {
   return <Counter />;

@@ -1,7 +1,7 @@
 import React from "react";
-import Users from "../layouts/users";
+import Users from "../components/users";
 import { useParams } from "react-router-dom";
-import UserInfo from "./userInfo";
+import UserInfo from "../components/userInfo";
 
 const UsersApp = () => {
   const params = useParams();
