@@ -5,7 +5,10 @@ export function validator(data, config) {
         let a = 'f';
         switch (ValidateMethod) {
             case "isRequired":
-                statusValidate = data.trim()===""
+                if (typeof data === "boolean") { statusValidate = !data }
+                else {
+                    statusValidate = data.trim() === ""
+                }
                 break;
             case "isEmail": {
                 const emailRegExp = /^\S+@\S+\.\S+$/g
@@ -24,7 +27,6 @@ export function validator(data, config) {
             }
             case "min": {
                 statusValidate = data.length < config.value
-                console.log(data.length)
                 break;
             }
             default:
