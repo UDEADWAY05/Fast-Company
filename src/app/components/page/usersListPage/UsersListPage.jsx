@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import API from "../API";
-import SearchStatus from "./searchStatus";
-import Pagination from "./pagiantion";
-import { paginate } from "../utils/paginate";
-import GroupList from "./groupList";
-import UserTable from "./usersTable";
-import FindInputComp from "./findInpt";
+import API from "../../../API"
+import SearchStatus from "../../ui/searchStatus";
+import Pagination from "../../common/pagiantion";
+import { paginate } from "../../../utils/paginate";
+import GroupList from "../../common/groupList";
+import UserTable from "../../ui/usersTable";
+import FindInputComp from "../../ui/findInpt";
 import _ from "lodash";
 
-const Users = () => {
+const UsersListPage = () => {
   const [users, setUsers] = useState();
   const pageSize = 12;
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,26 +51,6 @@ const Users = () => {
     setSelectedProf();
     setFilterFind(e.target.value);
   };
-  useEffect(() => {
-    if (document.querySelector("#" + sortBy.path) !== null) {
-      document.querySelector(".bi-caret-up-fill") === null ? "" : document.querySelector(".bi-caret-up-fill").className = "bi";
-      document.querySelector(".bi-caret-down-fill") === null ? "" : document.querySelector(".bi-caret-down-fill").className = "bi";
-      if (sortBy.order === "asc") {
-        document.querySelector("#" + sortBy.path).className = "bi-caret-up-fill";
-      } else {
-        document.querySelector("#" + sortBy.path).className = "bi-caret-down-fill";
-      }
-      setUsers([...users]);
-    } else if (document.querySelector("#profession") !== null) {
-      document.querySelector(".bi-caret-up-fill") === null ? "" : document.querySelector(".bi-caret-up-fill").className = "bi";
-      document.querySelector(".bi-caret-down-fill") === null ? "" : document.querySelector(".bi-caret-down-fill").className = "bi";
-      if (sortBy.order === "asc") {
-        document.querySelector("#profession").className = "bi-caret-up-fill";
-      } else {
-        document.querySelector("#profession").className = "bi-caret-down-fill";
-      }
-    }
-  }, [sortBy]);
   if (users) {
     let filteredUsers;
     if (selectedProf || filterFind) {
@@ -125,4 +105,4 @@ const Users = () => {
   return "Loading...";
 };
 
-export default Users;
+export default UsersListPage;
