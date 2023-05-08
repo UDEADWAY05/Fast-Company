@@ -1,12 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SelectField = ({ label, value, onChange, defaultOption, options, error, name }) => {
-    if (typeof value === "object") {
-        value = value.name
-    }
+const SelectField = ({ label, value, onChange, defaultOption, options, error, name, objectOn }) => {
+  if (typeof value === "object") {
+    value = value.name;
+  };
   const handleChange = ({ target }) => {
-    onChange({ name: target.name, value: target.value });
+    if (objectOn === true) {
+      const unkey = Object.keys(options).filter((quo) => { return options[quo].name === target.value; });
+      onChange({ name: target.name, value: options[unkey] });
+    } else {
+      onChange({ name: target.name, value: target.value });
+    };
   };
 
   const getInputClasses = () => {
@@ -24,7 +29,7 @@ const SelectField = ({ label, value, onChange, defaultOption, options, error, na
         <select className={getInputClasses()} name={name} id={name} value={value} onChange={handleChange}>
           <option disabled value="">{defaultOption}</option>
             {optionArray && optionArray.map(option => <option
-              value={option.value}
+              value={option.name}
               key={option.name}
             >
               {option.name}
@@ -43,7 +48,8 @@ SelectField.propTypes = {
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   onChange: PropTypes.func,
   error: PropTypes.string,
-  name: PropTypes.string
+  name: PropTypes.string,
+  objectOn: PropTypes.bool
 };
 
 export default SelectField;

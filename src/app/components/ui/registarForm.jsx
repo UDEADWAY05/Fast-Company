@@ -52,7 +52,6 @@ const RegisterForm = () => {
     }
   };
   const handleChange = (target) => {
-    console.log(target);
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
   const validate = () => {
@@ -87,7 +86,7 @@ const RegisterForm = () => {
               onChange={handleChange}
               error={errors.password}
           />
-          <SelectField name="professions" label="Выбери свою профессию" options={profession} defaultOption={"Choose..."} onChange={handleChange} error={errors.profession} value={data.profession}/>
+          <SelectField name="profession" label="Выбери свою профессию" options={profession} defaultOption={"Choose..."} onChange={handleChange} error={errors.profession} value={data.profession} objectOn={false}/>
           <RafioField options={[
             { name: "male", value: "male" },
             { name: "famale", value: "famale" },

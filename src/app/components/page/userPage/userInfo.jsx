@@ -6,15 +6,11 @@ import API from "../../../API"
 import UserForm from "../../ui/userform";
 
 const UserInfo = ({ id }) => {
-  const params = useParams();
-  const { edit } = params;
   const [user, setUser] = useState();
   useEffect(() => {
     API.users.getById(id).then((data) => setUser(data));
   }, []);
-  if (user && edit) {
-    return <UserForm userId={id} user={user}></UserForm>
-  } else if (user) {
+  if (user) {
     return <UserBody user={user}/>;
   }
   return "loading...";

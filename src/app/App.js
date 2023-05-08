@@ -8,11 +8,11 @@ function App() {
   return (
     <div className="d-flex flex-column">
         <NavBar></NavBar>
-      <Switch>
+        <Switch>
         <Route path="/users/:userId?/:edit?" component={UsersApp} />
         <Redirect exact from="/" to="/users" />
-        <Route exact path="/login/:type?" component={Login}></Route>
-        <Route path="/main" component={Main}></Route>
+        <Route exact path="/login/:type?" component={Login} />
+        <Route path="/main" component={Main} />
        </Switch>
     </div>
   );
