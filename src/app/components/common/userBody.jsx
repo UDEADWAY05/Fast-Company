@@ -1,20 +1,22 @@
 import React from "react";
-import Qualities from "../ui/qualities"
-import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
+import UserCard from "./userPage/userCard";
+import QualitiesCard from "./userPage/qualitiesCard";
+import MeatingCard from "./userPage/meatingCard";
+import CommentsCard from "./userPage/commentsCard";
 
 const UserBody = ({ user }) => {
-  const history = useHistory();
-  const HandleSave = () => {
-    history.push(history.location.pathname + "/edit");
-  };
-  return <div>
-    <h1>{user.name}</h1>
-    <h1>{"Профессия: " + user.profession.name}</h1>
-    <Qualities qualities={user.qualities} ></Qualities>
-    <h5>{"completedMeetings: " + user.completedMeetings}</h5>
-    <h1>{"Rate: " + user.rate}</h1>
-    <button className="" onClick={() => HandleSave()}>Редактировать</button>
+  return <div className="container">
+    <div className="row gutters-sm">
+    <div className="col-md-4 mb-3">
+        <UserCard user={user} />
+        <QualitiesCard user={user} />
+        <MeatingCard user={user} />
+    </div>
+    <div className="col-md-8">
+      <CommentsCard />
+    </div>
+    </div>
   </div>;
 };
 

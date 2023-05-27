@@ -3,9 +3,9 @@ import TextField from "../common/form/textField";
 import SelectField from "../common/form/selectField";
 import RafioField from "../common/form/radio.Filed";
 import MultiSelectField from "../common/form/multuSelectField";
-import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import API from "../../API";
+import BackButton from "../common/backButton";
 
 const UserForm = ({ userId }) => {
   const [user, setUser] = useState({ name: "", email: "", profession: {}, sex: "male", qualities: [] });
@@ -17,18 +17,16 @@ const UserForm = ({ userId }) => {
     API.qualities.fetchAll().then((data) => setQualities(data));
   }, []);
   const handleChange = (target) => {
-    console.log(target);
     setUser((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
-  const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
     API.users.update(userId, user);
-    history.push("/users");
   };
   if (user !== undefined && qualities !== undefined && profession !== undefined) {
     return (
       <div className="container mt-5">
+        <BackButton />
         <div className="row">
           <div className="col-md-6 offset-md-3 shadow p-4">
             <form onSubmit={handleSubmit}>
@@ -66,6 +64,7 @@ const UserForm = ({ userId }) => {
     );
   }
   return <div className="container mt-5">
+    <BackButton />
     <div className="row">
       <div className="col-md-6 offset-md-3 shadow p-4">
         Loading...
