@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import API from "../../../API"
+import API from "../../../API";
 import SearchStatus from "../../ui/searchStatus";
 import Pagination from "../../common/pagiantion";
 import { paginate } from "../../../utils/paginate";
@@ -7,15 +7,16 @@ import GroupList from "../../common/groupList";
 import UserTable from "../../ui/usersTable";
 import FindInputComp from "../../ui/findInpt";
 import _ from "lodash";
+import { useUser } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
-  const [users, setUsers] = useState();
   const pageSize = 12;
   const [currentPage, setCurrentPage] = useState(1);
   const [profession, setProfession] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
   const [filterFind, setFilterFind] = useState("");
+  const { users } = useUser();
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf]);
@@ -27,9 +28,7 @@ const UsersListPage = () => {
   useEffect(() => {
     API.professions.fetchAll().then((data) => setProfession(data));
   }, []);
-  useEffect(() => {
-    API.users.fetchAll().then((data) => setUsers(data));
-  }, []);
+
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
   };
@@ -37,15 +36,16 @@ const UsersListPage = () => {
     setSortBy(item);
   };
   const handleDelete = (id) => {
-    setUsers((prevState) => prevState.filter((item) => item._id !== id));
+    //  setUsers((prevState) => prevState.filter((item) => item._id !== id));
+    console.log(id);
   };
   const handleToggleBookMark = (id) => {
-    const p = users.filter((user) => user._id === id);
-    const index = users.findIndex((i) => i === p[0]);
-    users[index].bookmark === true
-      ? (users[index].bookmark = false)
-      : (users[index].bookmark = true);
-    setUsers([...users]);
+    // const p = users.filter((user) => user._id === id);
+    // const index = users.findIndex((i) => i === p[0]);
+    // users[index].bookmark === true
+    //   ? (users[index].bookmark = false)
+    //   : (users[index].bookmark = true);
+    // setUsers([...users]);
   };
   const handleFind = (e) => {
     setSelectedProf();
