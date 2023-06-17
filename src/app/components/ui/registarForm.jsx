@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
-import API from "../../API";
 import SelectField from "../common/form/selectField";
 import RafioField from "../common/form/radio.Filed";
 import MultiSelectField from "../common/form/multuSelectField";
 import ChechBoxField from "../common/form/checkBoxField";
+import { useQualities } from "../../hooks/useQuality";
+import { useProfessions } from "../../hooks/useProfession";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const RegisterForm = () => {
+  const history = useHistory()
   const [data, setData] = useState({ email: "", password: "", profession: "", sex: "male", qualities: [], licence: false });
-  const [qualities, setQualities] = useState({});
+  const { qualities } = useQualities()
   const [errors, setErrors] = useState({});
-  const [profession, setProfession] = useState();
-  useEffect(() => {
-    API.professions.fetchAll().then((data) => setProfession(data));
-    API.qualities.fetchAll().then((data) => setQualities(data));
-  }, []);
+  const { professions } = useProfessions()
+  const { signUp } = useAuth()
+  const qualitiesList = qualities.map(q => ({
+    label: q.name,
+    value: q._id
+  }));
+  const professionsList = professions.map(p => ({
+    label: p.name,
+    value: p._id
+  }));
+    
   const validatorConfig = {
     email: {
       isRequired: {
@@ -63,12 +73,19 @@ const RegisterForm = () => {
   useEffect(() => {
     validate();
   }, [data]);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    console.log(data);
+    console.log(data)
+    try {
+        await signUp(data);
+        history.push("/")
+    } catch (error) {
+        setErrors(error)
+    }
   };
+
   return (
         <form onSubmit={handleSubmit}>
           <TextField
@@ -86,7 +103,7 @@ const RegisterForm = () => {
               onChange={handleChange}
               error={errors.password}
           />
-          <SelectField name="profession" label="Выбери свою профессию" options={profession} defaultOption={"Choose..."} onChange={handleChange} error={errors.profession} value={data.profession} objectOn={false}/>
+          <SelectField name="profession" label="Выбери свою профессию" options={professionsList} defaultOption={"Choose..."} onChange={handleChange} error={errors.profession} value={data.profession} objectOn={false}/>
           <RafioField options={[
             { name: "male", value: "male" },
             { name: "famale", value: "famale" },
@@ -97,7 +114,7 @@ const RegisterForm = () => {
             onChange={handleChange}
             label="Выберите ваш пол"
           />
-          <MultiSelectField options={qualities} defaultValue={data.qualities} onChange={handleChange} name="qualities" label="Ввыберите ваши качества" />
+          <MultiSelectField options={qualitiesList} defaultValue={data.qualities} onChange={handleChange} name="qualities" label="Ввыберите ваши качества" />
           <ChechBoxField value={data.licence} onChange={handleChange} name="licence" error={errors.licence}>Потвердить <a>лицензионное соглашение</a></ChechBoxField>
           <button type="submit" disabled={!isValid} className="btn btn-primary w-100 mx-auto">submit</button>
         </form>
