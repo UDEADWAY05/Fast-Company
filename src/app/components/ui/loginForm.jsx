@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
+import { useAuth } from "../../hooks/useAuth";
 import ChechBoxField from "../common/form/checkBoxField";
 
 const LoginForm = () => {
   const [data, setData] = useState({ email: "", password: "", stayOn: false });
   const [errors, setErrors] = useState({});
+  const { signIn } = useAuth();
   const validatorConfig = {
     email: {
       isRequired: {
@@ -32,7 +34,6 @@ const LoginForm = () => {
     }
   };
   const handleChange = (target) => {
-    console.log(target);
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
   const validate = () => {
@@ -44,11 +45,16 @@ const LoginForm = () => {
   useEffect(() => {
     validate();
   }, [data]);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    console.log(data);
+    try {
+      await signIn(data);
+      history.push("/");
+    } catch (error) {
+      setErrors(error);
+    }
   };
   return (
     <form onSubmit={handleSubmit}>
