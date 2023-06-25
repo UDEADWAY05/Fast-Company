@@ -3,8 +3,10 @@ import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import { useAuth } from "../../hooks/useAuth";
 import ChechBoxField from "../common/form/checkBoxField";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const LoginForm = () => {
+  const history = useHistory()
   const [data, setData] = useState({ email: "", password: "", stayOn: false });
   const [errors, setErrors] = useState({});
   const { signIn } = useAuth();
@@ -51,7 +53,7 @@ const LoginForm = () => {
     if (!isValid) return;
     try {
       await signIn(data);
-      history.push("/");
+      history.push(history.location.state? history.location.state.from.pathname :"/");
     } catch (error) {
       setErrors(error);
     }

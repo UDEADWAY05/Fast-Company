@@ -1,33 +1,19 @@
-import React, { useEffect, useState } from "react";
-import API from "../../../API";
+import React from "react";
 import { displayDate } from "../../../utils/displayDate";
 import PropTypes from "prop-types";
+import { useUser } from "../../../hooks/useUsers";
+import { useAuth } from "../../../hooks/useAuth";
 
 const CommentCard = ({ comment, onRemove }) => {
-  const [user, setUser] = useState();
-  const [isLoding, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    API.users.getById(comment.userId).then((data) => {
-      setUser(data);
-      setIsLoading(false);
-    });
-  }, []);
-
+  const { getUserById } = useUser()
+  const {currentUser} = useAuth()
+  const user = getUserById(comment.userId)
   return <div className="bg-light card-body mb-3">
     <div className="row" >
       <div className="col" >
-        {isLoding
-          ? ("Loaging...")
-          : (
           <div className="d-flex flex-start" >
               <img
-                src={`https://avatars.dicebear.com/api/avataaars/${(
-                Math.random() + 1
-              )
-                .toString(36)
-                .substring(7)}.svg`}
+                src={user.image}
               className="rounded-circle shadow-1-strong me-3"
               alt="avatar"
               width="65"
@@ -39,13 +25,14 @@ const CommentCard = ({ comment, onRemove }) => {
                         {user && user.name}{" "}
                         <span className="small"> - {displayDate(comment.created_at)}</span>
                     </p>
+                    { currentUser._id === user._id && 
                     <button className=" btn btn-sm text-primary d-flex align-items-center" onClick={() => onRemove(comment._id)}>
                         <i className="bi bi-x-lg"></i>
-                    </button>
+                    </button>}
                 </div>
                 <p>{comment.content}</p>
             </div>
-          </div>)}
+          </div>
         </div>
       </div>
     </div>;

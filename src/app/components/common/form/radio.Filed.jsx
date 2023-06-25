@@ -9,7 +9,7 @@ const RafioField = ({ options, name, onChange, value, label }) => {
     <label className="form-label">{label}</label>
     <div>
       {options.map((option) => (
-        <div key={option.name + "_" + option.value  } className="form-check form-check-inline">  
+        <div key={option.name + "_" + option.value } className="form-check form-check-inline">
           <input
             className="form-check-input"
             type="radio"

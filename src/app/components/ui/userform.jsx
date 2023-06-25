@@ -6,24 +6,54 @@ import MultiSelectField from "../common/form/multuSelectField";
 import PropTypes from "prop-types";
 import API from "../../API";
 import BackButton from "../common/backButton";
+import { useUser } from "../../hooks/useUsers";
+import { useProfessions } from "../../hooks/useProfession";
+import { useQualities } from "../../hooks/useQuality";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
 
-const UserForm = ({ userId }) => {
-  const [user, setUser] = useState({ name: "", email: "", profession: {}, sex: "male", qualities: [] });
-  const [qualities, setQualities] = useState({});
-  const [profession, setProfession] = useState();
-  useEffect(() => {
-    API.users.getById(userId).then((data) => setUser(data));
-    API.professions.fetchAll().then((data) => setProfession(data));
-    API.qualities.fetchAll().then((data) => setQualities(data));
-  }, []);
+const UserForm =  ({ userId }) => {
+  const history = useHistory()
+  const { getUserById } = useUser()
+  const { updateUser } = useAuth()
+  const { getProfession, professions } = useProfessions()
+  const { qualities, getQuality } = useQualities();
+  const userLook = getUserById(userId)
+    const [user, setUser] = useState({
+        image: userLook.image,
+        rate: userLook.rate,
+        completedMeetings: userLook.completedMeetings,
+        licence: userLook.licence,
+        _id: userLook._id,
+        name: userLook.name,
+        email: userLook.email,
+        profession: userLook.profession,
+        sex: userLook.sex,
+        qualities: userLook.qualities
+    })
+  const defaultProffession = getProfession(user.profession)
   const handleChange = (target) => {
     setUser((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    API.users.update(userId, user);
+    updateUser(user)
+    history.push(`/users/${userId}`)
   };
-  if (user !== undefined && qualities !== undefined && profession !== undefined) {
+  
+  if (user !== undefined && qualities !== undefined && professions !== undefined) {
+    const qualitiesList = qualities.map(q => ({
+      label: q.name,
+      value: q._id
+    }));  
+    const proffesionsArray = professions.map(p => ({
+      label: p.name,
+      value: p._id
+    }))
+    const defaultQuality = userLook.qualities.map((qual) => getQuality(qual)).map(p => ({
+      label: p.name,
+      value: p._id
+    }))
     return (
       <div className="container mt-5">
         <BackButton />
@@ -43,7 +73,7 @@ const UserForm = ({ userId }) => {
                   value={user.email}
                   onChange={handleChange}
                 />
-                <SelectField name="profession" label="Выбери свою профессию" options={profession} defaultOption={"Choose..."} onChange={handleChange} value={user.profession} objectOn={true}/>
+                <SelectField name="profession" label="Выбери свою профессию" options={proffesionsArray} defaultOption={"Choose..."} onChange={handleChange} value={defaultProffession} objectOn={true}/>
                 <RafioField options={[
                   { name: "male", value: "male" },
                   { name: "famale", value: "famale" },
@@ -54,7 +84,7 @@ const UserForm = ({ userId }) => {
                   onChange={handleChange}
                   label="Выберите ваш пол"
                 />
-                <MultiSelectField options={qualities} defaultValue={user.qualities} onChange={handleChange} name="qualities" label="Ввыберите ваши качества" />
+                <MultiSelectField options={qualitiesList} defaultValue={defaultQuality} onChange={handleChange} name="qualities" label="Ввыберите ваши качества" />
                 <button type="submit" className="btn btn-primary w-100 mx-auto">submit</button>
               </div>
             </form>

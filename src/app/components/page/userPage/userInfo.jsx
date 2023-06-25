@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import UserBody from "../../common/userBody";
 import PropTypes from "prop-types";
-import API from "../../../API";
+import { useUser } from "../../../hooks/useUsers";
 
 const UserInfo = ({ id }) => {
-  const [user, setUser] = useState();
-  const [users, setUsers] = useState();
-  useEffect(() => {
-    API.users.getById(id).then((data) => setUser(data));
-    API.users.fetchAll().then((data) => setUsers(data));
-  }, []);
+  const { users, getUserById } = useUser()
+  const user = getUserById(id)
   if (user) {
     return <UserBody user={user} users={users}/>;
   }

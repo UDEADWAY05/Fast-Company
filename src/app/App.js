@@ -7,7 +7,9 @@ import NavBar from "./components/ui/navbar";
 import { ProfessionProvider } from "./hooks/useProfession";
 import { ToastContainer } from "react-toastify";
 import { QualitiesProvider } from "./hooks/useQuality";
-import AuthProvider from "./hooks/useAuth"
+import AuthProvider from "./hooks/useAuth";
+import ProtectedRoute from "./components/common/protectedRoute";
+import LogOut from "./layouts/logOut";
 function App() {
   return (
     <div className="d-flex flex-column">
@@ -16,10 +18,11 @@ function App() {
           <QualitiesProvider>
             <ProfessionProvider>
               <Switch>
-                <Route path="/users/:userId?/:edit?" component={UsersApp} />
+                <ProtectedRoute path="/users/:userId?/:edit?" component={UsersApp} />
                 <Route exact path="/login/:type?" component={Login} />
-                <Redirect exact from="/" to="/users" />
                 <Route path="/main" component={Main} />
+                <Route path="/logout" component={LogOut} />
+                <Redirect exact from="/" to="/main" />
               </Switch>
             </ProfessionProvider>
           </QualitiesProvider>
