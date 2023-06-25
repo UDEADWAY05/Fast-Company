@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CommentCard from "./commentCard";
-import API from "../../../API";
 import { orderBy } from "lodash";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import AddComentForm from "./addCommentForm";
+import { useComments } from "../../../hooks/useComents";
 
 const CommentsCard = () => {
-  const { userId } = useParams();
-  const [commentsArr, setCommentsArr] = useState();
-  useEffect(() => {
-    API.comments.fetchCommentsForUser(userId).then((data) => setCommentsArr(data));
-  }, []);
+  const { createComment, comments, removeComment } = useComments() 
   const handleRemove = (id) => {
-    API.comments.remove(id).then((id) => setCommentsArr(commentsArr.filter((x) => x._id !== id)));
+    removeComment(id)
   };
   const handleSubmit = (comment) => {
-    API.comments.add(comment).then((data) => (setCommentsArr([...commentsArr, data])));
+    // API.comments.add(comment).then((data) => (setCommentsArr([...commentsArr, data])));
+      createComment(comment)
   };
-  const sortedComments = orderBy(commentsArr, ["created_at"], ["desc"]);
+  const sortedComments = orderBy(comments, ["created_at"], ["desc"]);
 
   return <div className="d-flex flex-column position-relative" >
       <AddComentForm onChange={handleSubmit} />

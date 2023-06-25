@@ -34,13 +34,16 @@ const UserProvider = ({ children }) => {
       errorCatchet(error);
     }
   };
+  function getUserById(userId) {
+      return users.find(user => user._id === userId)
+  }
   function errorCatchet(error) {
     const { message } = error.response.data;
     setError(message);
     setLoding(false);
   };
   return (
-    <UserContext.Provider value={{ users }}>
+    <UserContext.Provider value={{ users, getUserById }}>
       { !isLoading ? children : "loading"}
     </UserContext.Provider>
   );

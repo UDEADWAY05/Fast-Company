@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const RegisterForm = () => {
   const history = useHistory()
-  const [data, setData] = useState({ email: "", password: "", profession: "", sex: "male", qualities: [], licence: false });
+  const [data, setData] = useState({ name: "", email: "", password: "", profession: "", sex: "male", qualities: [], licence: false });
   const { qualities } = useQualities()
   const [errors, setErrors] = useState({});
   const { professions } = useProfessions()
@@ -33,6 +33,15 @@ const RegisterForm = () => {
       },
       isEmail: {
         message: "Email введён не коректн"
+      }
+    },
+    name: {
+      isRequired: {
+        message: "Имя обязательно для заполнения"
+      },
+      min: {
+        message: "Имя должно быть минимум из 3 символов",
+        value: 3
       }
     },
     password: {
@@ -77,7 +86,6 @@ const RegisterForm = () => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    console.log(data)
     try {
         await signUp(data);
         history.push("/")
@@ -94,6 +102,13 @@ const RegisterForm = () => {
               value={data.email}
               onChange={handleChange}
               error={errors.email}
+          />
+          <TextField
+              label="имя"
+              name="name"
+              value={data.name}
+              onChange={handleChange}
+              error={errors.name}
           />
           <TextField
               label="пароль"

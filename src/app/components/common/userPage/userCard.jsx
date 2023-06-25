@@ -1,21 +1,21 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UserCard = React.memo(({ user }) => {
+  const {currentUser} = useAuth()
   const history = useHistory();
   const HandleSave = () => {
     history.push(history.location.pathname + "/edit");
   };
   return <div className="card mb-3">
-      <button onClick={HandleSave} className="position-absolute top-0 end-0 btn btn-light btn-sm">
-        <i className="bi bi-gear"></i>
-      </button>
+      {currentUser._id === user._id && <button onClick={HandleSave} className="position-absolute top-0 end-0 btn btn-light btn-sm">
+          <i className="bi bi-gear"></i>
+      </button>}
       <div className="card-body">
         <div className="d-flex flex-column align-items-center text-center position-relative">
-            <img src={`https://avatars.dicebear.com/api/avataaars/${(Math.random() + 1)
-                .toString(36)
-                .substring(7)}.svg`}
+            <img src={user.image}
                 className="rounded-circle shadow-1-strong me-3"
                 alt="avatar"
                 width="150"
