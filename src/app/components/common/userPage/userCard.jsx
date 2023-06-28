@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../../hooks/useAuth";
 
 const UserCard = React.memo(({ user }) => {
+  console.log(user)
   const {currentUser} = useAuth()
   const history = useHistory();
   const HandleSave = () => {
@@ -22,7 +23,7 @@ const UserCard = React.memo(({ user }) => {
             />
             <div className="mt-3">
                 <h4>{user.name}</h4>
-                <p className="text-secondary mb-1">{user.profession.name}</p>
+                <p className="text-secondary mb-1">{user.profession.label}</p>
                 <div className="text-muted">
                     <i className="bi bi-caret-down-fill text-primary" role="button"></i>
                     <i className="bi bi-caret-up text-secondary" role="button"></i>

@@ -12,7 +12,7 @@ export const useQualities = () => {
 export const QualitiesProvider = ({ children }) => {
   const [qualities, setQualities] = useState([]);
   const [error, setError] = useState(null);
-  const [isLoading, setLoadig] = useState(true);
+  const [qualIsLoading, setLoadig] = useState(true);
   useEffect(() => {
     getQualities();
   }, []);
@@ -45,8 +45,8 @@ export const QualitiesProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <QualitiesContex.Provider value={{ qualities, getQuality, isLoading }}>
-      {!isLoading ? children : <h1>Qualities loading...</h1>}
+    <QualitiesContex.Provider value={{ qualities, getQuality, qualIsLoading }}>
+      {!qualIsLoading ? children : <h1>Qualities loading...</h1>}
     </QualitiesContex.Provider>
   );
 };

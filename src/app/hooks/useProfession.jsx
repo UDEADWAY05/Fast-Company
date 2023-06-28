@@ -10,7 +10,7 @@ export const useProfessions = () => {
 };
 
 export const ProfessionProvider = ({ children }) => {
-  const [isLoading, setLoading] = useState(true);
+  const [profIsLoading, setLoading] = useState(true);
   const [professions, setProfessions] = useState();
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -38,9 +38,9 @@ export const ProfessionProvider = ({ children }) => {
     setLoading(false);
   };
   function getProfession(id) {
-    return !isLoading ? professions.find((p) => { return p._id === id; }) : "loading..";
+    return !profIsLoading ? professions.find((p) => { return p._id === id; }) : "loading..";
   }
-  return (<ProfessionContext.Provider value={{ isLoading, professions, getProfession }}>{children}</ProfessionContext.Provider>);
+  return (<ProfessionContext.Provider value={{ profIsLoading, professions, getProfession }}>{children}</ProfessionContext.Provider>);
 };
 
 ProfessionProvider.propTypes = {

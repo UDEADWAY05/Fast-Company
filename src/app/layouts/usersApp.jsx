@@ -2,8 +2,8 @@ import React from "react";
 import UsersListPage from "../components/page/usersListPage";
 import { useParams } from "react-router-dom";
 import UserInfo from "../components/page/userPage";
-import UserForm from "../components/ui/userform";
-import UserProvider from "../hooks/useUsers";
+import UserForm from "../components/page/userEditPage";
+import UserProvider from "../hooks/useUsers"; 
 import { useAuth } from "../hooks/useAuth";
 import { useHistory } from "react-router-dom";
 
