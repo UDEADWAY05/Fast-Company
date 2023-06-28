@@ -71,6 +71,7 @@ const RegisterForm = () => {
     }
   };
   const handleChange = (target) => {
+    console.log(target)
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
   const validate = () => {
@@ -87,7 +88,7 @@ const RegisterForm = () => {
     const isValid = validate();
     if (!isValid) return;
     try {
-        await signUp(data);
+        await signUp({...data, profession: data.profession.value });
         history.push("/")
     } catch (error) {
         setErrors(error)
@@ -118,7 +119,7 @@ const RegisterForm = () => {
               onChange={handleChange}
               error={errors.password}
           />
-          <SelectField name="profession" label="Выбери свою профессию" options={professionsList} defaultOption={"Choose..."} onChange={handleChange} error={errors.profession} value={data.profession} objectOn={false}/>
+          <SelectField name="profession" label="Выбери свою профессию" options={professionsList} defaultOption={"Choose..."} onChange={handleChange} error={errors.profession} value={data.profession} objectOn={true}/>
           <RafioField options={[
             { name: "male", value: "male" },
             { name: "famale", value: "famale" },

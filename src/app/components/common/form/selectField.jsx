@@ -3,14 +3,12 @@ import PropTypes from "prop-types";
 
 const SelectField = ({ label, value, onChange, defaultOption, options, error, name, objectOn }) => {
   if (typeof value === "object") {
-    value = value.name;
+    value.name ? value = value.name : value = value.label;
   };
   const handleChange = ({ target }) => {
     const unkey = Object.keys(options).filter((quo) => { return options[quo].label === target.value; });
-    value = options[unkey].label
-    onChange({ name: target.name, value: options[unkey].value });
-    //   onChange({ name: target.name, value: target.value });
-    
+    // value = options[unkey].label
+    onChange({ name: target.name, value: options[unkey] });
   };
 
   const getInputClasses = () => {
@@ -20,7 +18,7 @@ const SelectField = ({ label, value, onChange, defaultOption, options, error, na
   return <div className="mb-4">
       <label htmlFor={name} className="form-label">{ label }</label>
         <select className={getInputClasses()} name={name} id={name} value={value} onChange={handleChange}>
-          <option disabled value="">{defaultOption}</option>
+          <option value="" disabled>{defaultOption}</option>
             {options && options.map(option => <option
               value={option.label}
               key={option.label}

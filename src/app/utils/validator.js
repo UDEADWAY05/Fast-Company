@@ -6,8 +6,10 @@ export function validator(data, config) {
         switch (ValidateMethod) {
             case "isRequired":
                 if (typeof data === "boolean") { statusValidate = !data }
-                else {
+                else if(typeof data === "string") {
                     statusValidate = data.trim() === ""
+                } else if (typeof data === "object") {
+                    statusValidate = data.label.trim() === ""
                 }
                 break;
             case "isEmail": {
