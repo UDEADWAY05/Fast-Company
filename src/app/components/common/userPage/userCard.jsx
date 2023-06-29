@@ -2,9 +2,11 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useAuth } from "../../../hooks/useAuth";
+import { useProfessions } from "../../../hooks/useProfession";
 
 const UserCard = React.memo(({ user }) => {
-  console.log(user)
+  const { getProfession } = useProfessions()
+  const profession = getProfession(user.profession)
   const {currentUser} = useAuth()
   const history = useHistory();
   const HandleSave = () => {
@@ -23,7 +25,7 @@ const UserCard = React.memo(({ user }) => {
             />
             <div className="mt-3">
                 <h4>{user.name}</h4>
-                <p className="text-secondary mb-1">{user.profession.label}</p>
+                <p className="text-secondary mb-1">{profession.name}</p>
                 <div className="text-muted">
                     <i className="bi bi-caret-down-fill text-primary" role="button"></i>
                     <i className="bi bi-caret-up text-secondary" role="button"></i>
