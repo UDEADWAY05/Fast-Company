@@ -6,18 +6,20 @@ import MultiSelectField from "../../common/form/multuSelectField";
 import PropTypes from "prop-types";
 import BackButton from "../../common/backButton";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useQualities } from "../../../hooks/useQuality";
 import { useAuth } from "../../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
+import { getProfessionById, getProfessions } from "../../../store/profession";
 
 const UserForm =  ({ userId }) => {
   const history = useHistory()
   const [isLoading, setLoading] = useState()
   const { getUserById } = useUser()
   const { updateUser } = useAuth()
-  const { getProfession, professions } = useProfessions()
-  const { qualities, getQuality } = useQualities();
+  const professions = useSelector(getProfessions())
+  const qualities = useSelector(getQualities())
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus())
   const userLook = getUserById(userId)
   const [user, setUser] = useState({
         image: userLook.image,
@@ -27,12 +29,12 @@ const UserForm =  ({ userId }) => {
         _id: userLook._id,
         name: userLook.name,
         email: userLook.email,
-        profession: getProfession(userLook.profession),
+        profession: useSelector(getProfessionById(userLook.profession)),
         sex: userLook.sex,
         qualities: userLook.qualities
   })
   useEffect(() => {
-    if (user !== undefined && qualities !== undefined && professions !== undefined) {
+    if (user !== undefined &&  qualitiesLoading && professions !== undefined) {
       setLoading(false);
     }
   }, [])
@@ -41,7 +43,7 @@ const UserForm =  ({ userId }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateUser({...user, profession: user.profession.value})
+    updateUser({ ...user, profession: user.profession.value})
     history.push(`/users/${userId}`)
   };
   
@@ -54,7 +56,7 @@ const UserForm =  ({ userId }) => {
       label: p.name,
       value: p._id
     }))
-    const defaultQuality = userLook.qualities.map((qual) => getQuality(qual)).map(p => ({
+    const defaultQuality = userLook.qualities.map((qual) => qualities.find((q) => q._id === qual)).map(p => ({
       label: p.name,
       value: p._id
     }))

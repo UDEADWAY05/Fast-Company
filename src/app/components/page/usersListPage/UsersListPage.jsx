@@ -7,12 +7,14 @@ import UserTable from "../../ui/usersTable";
 import FindInputComp from "../../ui/findInpt";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getProfessions, getProfessionsLoadingStatus } from "../../../store/profession";
 
 const UsersListPage = () => {
   const pageSize = 12;
-  const { isLoading: professionsLoading, professions} = useProfessions()
+  const professions = useSelector(getProfessions())
+  const professionsLoading = useSelector(getProfessionsLoadingStatus())
   const { currentUser } = useAuth() 
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
@@ -47,11 +49,11 @@ const UsersListPage = () => {
     setFilterFind(e.target.value);
   };
   if (users && users[0] !== undefined) {
-
     function filterUsers(data) {
         let filteredUsers;
         if (selectedProf || filterFind) {
         if (selectedProf) {
+            console.log(selectedProf)
             filteredUsers = data.filter((user) => user.profession === selectedProf._id);
         } else if (filterFind) {
             filteredUsers = users.filter((user) => user.name.includes(filterFind));
@@ -70,6 +72,7 @@ const UsersListPage = () => {
     const clearFilter = () => {
       setSelectedProf();
     };
+
     return <div>
             <div className="d-flex">
             {professions && !professionsLoading && <div className="d-flex flex-column flex-shrink-0 p-3">

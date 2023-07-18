@@ -2,12 +2,12 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useAuth } from "../../../hooks/useAuth";
-import { useProfessions } from "../../../hooks/useProfession";
+import { useSelector } from "react-redux";
+import { getProfessionById } from "../../../store/profession";
 
 const UserCard = React.memo(({ user }) => {
-  const { getProfession } = useProfessions()
-  const profession = getProfession(user.profession)
-  const {currentUser} = useAuth()
+  const profession = useSelector(getProfessionById(user.profession));
+  const { currentUser } = useAuth();
   const history = useHistory();
   const HandleSave = () => {
     history.push(history.location.pathname + "/edit");
