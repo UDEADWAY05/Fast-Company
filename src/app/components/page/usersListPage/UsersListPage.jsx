@@ -6,21 +6,20 @@ import GroupList from "../../common/groupList";
 import UserTable from "../../ui/usersTable";
 import FindInputComp from "../../ui/findInpt";
 import _ from "lodash";
-import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/profession";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
   const pageSize = 12;
   const professions = useSelector(getProfessions())
   const professionsLoading = useSelector(getProfessionsLoadingStatus())
-  const { currentUser } = useAuth() 
+  const currentUserId = useSelector(getCurrentUserId())
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
   const [filterFind, setFilterFind] = useState("");
-  const { users } = useUser();
+  const users = useSelector(getUsersList());
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf]);
@@ -62,7 +61,7 @@ const UsersListPage = () => {
         filteredUsers = users;
         }
         return filteredUsers.filter(user => {
-           return user._id !== currentUser._id
+           return user._id !== currentUserId
         })
     }
     const filteredUsers = filterUsers(users)

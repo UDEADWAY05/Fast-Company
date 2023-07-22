@@ -5,22 +5,20 @@ import RafioField from "../../common/form/radio.Filed";
 import MultiSelectField from "../../common/form/multuSelectField";
 import PropTypes from "prop-types";
 import BackButton from "../../common/backButton";
-import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
 import { getProfessionById, getProfessions } from "../../../store/profession";
+import { getCurrentUserData, updateUser } from "../../../store/users";
 
 const UserForm =  ({ userId }) => {
   const history = useHistory()
+  const dispatch = useDispatch()
   const [isLoading, setLoading] = useState()
-  const { getUserById } = useUser()
-  const { updateUser } = useAuth()
   const professions = useSelector(getProfessions())
   const qualities = useSelector(getQualities())
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus())
-  const userLook = getUserById(userId)
+  const userLook = useSelector(getCurrentUserData())
   const [user, setUser] = useState({
         image: userLook.image,
         rate: userLook.rate,
@@ -43,8 +41,10 @@ const UserForm =  ({ userId }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateUser({ ...user, profession: user.profession.value})
-    history.push(`/users/${userId}`)
+    const userName = user.name
+    console.log(userName)
+    dispatch(updateUser({ ...user, profession: user.profession === undefined ? userLook.profession : (user.profession.value ? user.profession.value : user.profession._id) }))
+    // history.push(`/users/${userId}`)
   };
   
   if (!isLoading) {
