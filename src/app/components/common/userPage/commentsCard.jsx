@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import CommentCard from "./commentCard";
 import { orderBy } from "lodash";
 import AddComentForm from "./addCommentForm";
-import { useComments } from "../../../hooks/useComents";
 import { useDispatch, useSelector } from "react-redux";
 import { createComment, removeComment, getComments, getCommentsLoadingStatus, loadCommentsList } from "../../../store/comments";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
