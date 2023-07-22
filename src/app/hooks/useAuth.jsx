@@ -97,8 +97,8 @@ const AuthProvider = ({ children }) => {
     }
   }
   function errorCatcher(error) {
-    const { message } = error.response.data;
-    setError(message);
+    // const { message } = error.response;
+    // setError(message);
   };
   async function getUserData() {
     try {

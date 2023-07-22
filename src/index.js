@@ -6,6 +6,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import Counter from "./app/App";
 import { createStore } from "./app/store/createStore";
 import { Provider } from "react-redux";
+import { Router } from "react-router-dom";
+import history from "./app/utils/history";
 
 const store = createStore()
 
@@ -18,10 +20,10 @@ const contain = document.getElementById("root");
 const root = createRoot(contain);
 root.render(
     <Provider store={store}>
-        <BrowserRouter>
+        <Router history={history}>
             <React.StrictMode>
                 <App />
             </React.StrictMode>
-        </BrowserRouter>
+        </Router>
     </Provider>
 );

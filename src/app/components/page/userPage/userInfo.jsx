@@ -1,11 +1,12 @@
 import React from "react";
 import UserBody from "../../common/userBody";
 import PropTypes from "prop-types";
-import { useUser } from "../../../hooks/useUsers";
+import { useSelector } from "react-redux";
+import { getUserById, getUsersList } from "../../../store/users";
 
 const UserInfo = ({ id }) => {
-  const { users, getUserById } = useUser()
-  const user = getUserById(id)
+  const users = useSelector(getUsersList())
+  const user = useSelector(getUserById(id))
   if (user) {
     return <UserBody user={user} users={users}/>;
   }

@@ -1,11 +1,12 @@
 import React from "react";
-import { useAuth } from "../hooks/useAuth";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { logOut } from "../store/users";
 
 const LogOut = () => {
-    const { logout } = useAuth();
+    const dispatch = useDispatch()
     useEffect(() => {
-        logout();
+        dispatch(logOut())
     }, []);
     return <h1>Logout</h1> ;
 }

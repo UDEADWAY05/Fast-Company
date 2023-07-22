@@ -1,19 +1,19 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessionById } from "../../../store/profession";
+import { getCurrentUserId } from "../../../store/users";
 
 const UserCard = React.memo(({ user }) => {
   const profession = useSelector(getProfessionById(user.profession));
-  const { currentUser } = useAuth();
+  const  currentUserId = useSelector(getCurrentUserId())
   const history = useHistory();
   const HandleSave = () => {
     history.push(history.location.pathname + "/edit");
   };
   return <div className="card mb-3">
-      {currentUser._id === user._id && <button onClick={HandleSave} className="position-absolute top-0 end-0 btn btn-light btn-sm">
+      {currentUserId === user._id && <button onClick={HandleSave} className="position-absolute top-0 end-0 btn btn-light btn-sm">
           <i className="bi bi-gear"></i>
       </button>}
       <div className="card-body">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Login from "./layouts/Login";
 import Main from "./layouts/Main";
@@ -8,17 +8,11 @@ import { ToastContainer } from "react-toastify";
 import AuthProvider from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/protectedRoute";
 import LogOut from "./layouts/logOut";
-import { useDispatch } from "react-redux";
-import { loadQualitiesList } from "./store/qualities";
-import { loadProfessionsList } from "./store/profession";
+import AppLoader from "./components/ui/hoc/appLoader";
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(loadQualitiesList());
-    dispatch(loadProfessionsList());
-  }, []);
   return (
     <div className="d-flex flex-column">
+        <AppLoader/>
         <AuthProvider>
           <NavBar></NavBar>
               <Switch>
@@ -30,6 +24,7 @@ function App() {
               </Switch>
         </AuthProvider>
         <ToastContainer />
+        <AppLoader/>
     </div>
   );
 }
