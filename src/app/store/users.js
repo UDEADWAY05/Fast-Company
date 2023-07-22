@@ -4,6 +4,7 @@ import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage";
 import randomInt from "../utils/getRandomInt";
 import history from "../utils/history";
+import { generateAuthError } from "../utils/generateAuthError";
 
 const initialState = localStorageService.getAccessToken() ? {
     entities: null,
@@ -57,11 +58,13 @@ const usersSlice = createSlice({
             state.dataLoaded = false
         },
         userUpdate: (state, action) => {
-            const userIndex = state.entities.findIndex(u => u._id === action.payload._id)
-            state.entities[userIndex] = action.payload
+            state.entities = [...state.entities.filter((u => u._id !== action.payload._id)), action.payload]
         },
         userUpdateFailed: (state, action) => {
             state.error = action.payload
+        },
+        authRequested: (state, action) => {
+            state.error = null
         }
     }
 })
@@ -78,14 +81,22 @@ const createUserFailed = createAction("users/CreateFailed")
 
 export const login = ({payload, redirect}) => async (dispatch) => {
     const {email, password} = payload
-    dispatch(authRequested)
+    dispatch(authRequested())
     try {
         const data = await authService.login({ email, password })
-        dispatch(authRequestSuccess({ userId: data.localId })) 
+        dispatch(authRequestSuccess({ userId: data.localId }))
         localStorageService.setTokens(data)
         history.push(redirect)
     } catch (error) {
-        dispatch(authRequestFailed(error.message))
+        const { code, message } = error.response.data.error
+        console.log({code,message})
+        if (code === 400) {
+            const errorMessage = generateAuthError(message)
+            console.log(error)
+            dispatch(authRequestFailed(errorMessage))
+        } else {
+            dispatch(authRequestFailed(error.message))
+        }
     }
 }
 
@@ -120,7 +131,7 @@ export const updateUser = (user) => async (dispatch) => {
         const { content } = await userService.updateUser(user)
         console.log(content)
         dispatch(userUpdate(content))
-        history.push(`/users/${user._id}/`)
+        history.push(`/users/${user._id}`)
     } catch (error) {
         dispatch(userUpdateFailed(error))
     }
@@ -161,6 +172,7 @@ export const getCurrentUserData = () => (state) => {
         ? state.users.entities.find((user) => user._id === state.users.auth.userId)
         : null
 }
+export const getAuthErrors = () => (state) => state.users.error
 
 
 export default usersReducer;
