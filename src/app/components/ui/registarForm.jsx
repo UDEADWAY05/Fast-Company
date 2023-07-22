@@ -5,7 +5,6 @@ import SelectField from "../common/form/selectField";
 import RafioField from "../common/form/radio.Filed";
 import MultiSelectField from "../common/form/multuSelectField";
 import ChechBoxField from "../common/form/checkBoxField";
-// import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useDispatch, useSelector } from "react-redux";
 import { getQualities } from "../../store/qualities";
