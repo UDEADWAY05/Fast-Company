@@ -4,8 +4,6 @@ import UserCard from "./userPage/userCard";
 import QualitiesCard from "./userPage/qualitiesCard";
 import MeatingCard from "./userPage/meatingCard";
 import CommentsCard from "./userPage/commentsCard";
-import { useQualities } from "../../hooks/useQuality";
-import { CommentsProvider } from "../../hooks/useComents";
 
 const UserBody = ({ user }) => {
     
@@ -17,9 +15,7 @@ const UserBody = ({ user }) => {
         <MeatingCard user={user} />
     </div>
     <div className="col-md-8">
-      <CommentsProvider>
         <CommentsCard />
-      </CommentsProvider>
     </div>
     </div>
   </div>;

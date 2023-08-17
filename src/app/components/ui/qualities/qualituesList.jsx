@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Qualitie from "./qualite";
-import { useQualities } from "../../../hooks/useQuality";
 import { useDispatch, useSelector } from "react-redux";
 import { getQualitiesById, getQualitiesLoadingStatus, loadQualitiesList } from "../../../store/qualities";
 

@@ -55,8 +55,7 @@ export const loadCommentsList = (userId) => async (dispatch, getState) => {
 export const createComment = (data) => async(dispatch, getState) => {
     const comment = {
         ...data,
-        created_at: Date.now(),
-        _id: nanoid()
+        created_at: Date.now()
     }
     try {
         const { content } = await commentServise.createComment(comment)
@@ -69,8 +68,7 @@ export const createComment = (data) => async(dispatch, getState) => {
 export const removeComment = (id) => async(dispatch, getState) => {
     try {
         const { content } = await commentServise.removeComment(id)
-        console.log(content)
-        if (content === null) dispatch(commentRemove(id))
+        if (!content) dispatch(commentRemove(id))
     } catch (error) {
         dispatch(commentRemoveFailed(error))
     }

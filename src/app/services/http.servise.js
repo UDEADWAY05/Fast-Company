@@ -1,7 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import configFiles from "../../config.json";
-import { httpAuth } from "../hooks/useAuth";
 import localStorageService from "./localStorage";
 import authService from "./auth.service";
 
@@ -11,12 +10,14 @@ const http = axios.create({
 
 http.interceptors.request.use(
    async function (config) {
+    const expiresDate = localStorageService.getTokenExpires()
+    const refreshToken = localStorageService.getRefreshToken()
+    const isExpired = refreshToken && expiresDate < Date.now()
     if (configFiles.isFireBase) {
       const containSlash = /\/$/gi.test(config.url);
       config.url = (containSlash ? config.url.slice(0, -1) : config.url) + ".json";
-        const expiresDate = localStorageService.getTokenExpires()
-        const refreshToken = localStorageService.getRefreshToken()
-        if (refreshToken && expiresDate < Date.now()) {
+
+        if (isExpired) {
             const { data } = await authService.refresh()
             localStorageService.setTokens({
                 refreshToken: data.refresh_token, idToken: data.id_token, expiresIn: data.expires_in, localId: data.user_id
@@ -26,7 +27,16 @@ http.interceptors.request.use(
         if (accessToken) {
             config.params={...config.params, auth: accessToken}
         }
-    };
+    } else {
+        if (isExpired) {
+            const { data } = await authService.refresh()
+            localStorageService.setTokens({data})
+        }
+        const accessToken = localStorageService.getAccessToken()
+        if (accessToken) {
+            config.headers={...config.headers, Authorization: `Bearer ${accessToken}`}
+        }
+    }
     return config;
   }, function (error) {
     return Promise.reject(error);
@@ -46,6 +56,7 @@ http.interceptors.response.use(
     if (configFiles.isFireBase) {
       res.data = { content: transformData(res.data) };
     };
+    res.data = {content: res.data}
     return res;
   },
   function (error) {
@@ -63,7 +74,8 @@ const httpService = {
   get: http.get,
   post: http.post,
   put: http.put,
-  delete: http.delete
+  delete: http.delete,
+  patch: http.patch
 };
 
 export default httpService;
