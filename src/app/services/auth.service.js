@@ -1,26 +1,26 @@
-import axios from "axios"
-import localStorageService from "./localStorage"
-import config from "../../config.json"
+import axios from "axios";
+import localStorageService from "./localStorage";
+import config from "../../config.json";
 
 const httpAuth = axios.create({
     baseURL: config.apiEndpoint + "/auth/",
     params: {
         key: process.env.REACT_APP_FIREBASE_KEY
     }
-})
+});
 
 const authService = {
     register: async (payload) => {
-        const { data } = await httpAuth.post("signUp", payload)
-        return data
+        const { data } = await httpAuth.post("signUp", payload);
+        return data;
     },
     login: async ({ email, password }) => {
         const { data } = await httpAuth.post("signInWithPassword", {
             email,
             password,
-            returnSecureToken: true 
-        })
-        return data
+            returnSecureToken: true
+        });
+        return data;
     },
     refresh: async () => {
         const { data } = await httpAuth.post("token", {
@@ -29,6 +29,6 @@ const authService = {
         });
         return data;
     }
-}
+};
 
-export default authService
+export default authService;

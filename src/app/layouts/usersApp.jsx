@@ -7,24 +7,27 @@ import { useSelector } from "react-redux";
 import { getCurrentUserId } from "../store/users";
 import UsersLoader from "../components/ui/hoc/usersLoader";
 
-
 const UsersApp = () => {
-  const params = useParams();
-  const { userId, edit } = params;
-  const currentUserId = useSelector(getCurrentUserId())
+    const params = useParams();
+    const { userId, edit } = params;
+    const currentUserId = useSelector(getCurrentUserId());
     return <>
         <UsersLoader>
-            {userId ? (
-                edit ?
-                (userId === currentUserId 
-                    ? <UserForm userId={userId} />
-                    : history.push(`/users/${currentUserId}/edit`)
-                    ) : (<UserInfo id={userId} />)
-                ) : (
-                <UsersListPage/>
-            )}
+            {userId
+                ? (
+                    edit
+                        ? (
+                            userId === currentUserId
+                                ? <UserForm userId={userId} />
+                                : history.push(`/users/${currentUserId}/edit`)
+                        )
+                        : (<UserInfo id={userId} />)
+                )
+                : (
+                    <UsersListPage />
+                )}
         </UsersLoader>
-    </>
+    </>;
 };
 
 export default UsersApp;

@@ -7,12 +7,11 @@ import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import history from "./app/utils/history";
 
-const store = createStore()
+const store = createStore();
 
 const App = () => {
-  return <Counter />;
+    return <Counter />;
 };
-
 
 const contain = document.getElementById("root");
 const root = createRoot(contain);

@@ -4,12 +4,12 @@ import { useSelector } from "react-redux";
 import { getCurrentUserData } from "../../store/users";
 
 const NavProfile = () => {
-    const currentUser = useSelector(getCurrentUserData())
-    const [isOpen, setOper] = useState(false)
+    const currentUser = useSelector(getCurrentUserData());
+    const [isOpen, setOper] = useState(false);
     const toggleMenu = () => {
-        setOper(presState => !presState)
-    }
-    if(!currentUser) return "loading..."
+        setOper(presState => !presState);
+    };
+    if (!currentUser) return "loading...";
     return (<div className="dropdown" onClick={toggleMenu}>
         <div className="btn dropdown-toggle d-flex align-items-center">
             <div className="me-2">{currentUser.name}</div>
@@ -19,7 +19,7 @@ const NavProfile = () => {
             <Link to={`/users/${currentUser._id}`} className="dropdown-item">Profile</Link>
             <Link to="/logout" className="dropdown-item">Logout</Link>
         </div>
-    </div> );
-}
- 
+    </div>);
+};
+
 export default NavProfile;
