@@ -1,7 +1,7 @@
-import Table from "./table"
-export default Table
-import TableBody from "./tableBody" 
-import TableHeader from "./tableHeader"
+import Table from "./table";
+import TableBody from "./tableBody";
+import TableHeader from "./tableHeader";
+export default Table;
 export {
     TableBody, TableHeader
-}
+};

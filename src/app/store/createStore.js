@@ -9,10 +9,10 @@ const rootReducer = combineReducers({
     professions: professionsReducer,
     users: usersReducer,
     comments: commentsReducer
-})
+});
 
 export function createStore() {
     return configureStore({
-        reducer: rootReducer,
-    })
+        reducer: rootReducer
+    });
 }
